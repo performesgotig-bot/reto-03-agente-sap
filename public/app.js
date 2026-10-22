@@ -1,10 +1,10 @@
 const cases = [
-  { id: "sol-001", vendor: "TecnoSuministros", amount: "$11.400.000" },
-  { id: "sol-002", vendor: "Soluciones Digitales del Norte", amount: "$8.500.000" },
-  { id: "sol-003", vendor: "Mobiliario Andino", amount: "$74.000.000" },
-  { id: "sol-004", vendor: "Cloud Andina", amount: "$25.000.000" },
-  { id: "sol-005", vendor: "Papelería Central", amount: "$3.200.000" },
-  { id: "sol-006", vendor: "TecnoSuministros", amount: "$5.400.000" },
+  { id: "sol-001", vendor: "TecnoSuministros S.A.S.", amount: 11400000, date: "2026-08-20", terms: "Z030", currency: "COP", center: "CC-1010", subarea: "Infraestructura", tax: "C1", description: "Renovación licencias antivirus corporativo 120 puestos, vigencia 12 meses", quantity: 120, price: 95000 },
+  { id: "sol-002", vendor: "Soluciones Digitales del Norte S.A.S.", amount: 8500000, date: "2026-08-22", terms: "Z030", currency: "COP", center: "CC-1010", subarea: "Desarrollo", tax: "C1", description: "Licencia anual herramienta de pruebas automatizadas, 5 usuarios", quantity: 5, price: 1700000 },
+  { id: "sol-003", vendor: "Mobiliario Andino S.A.", amount: 74000000, date: "2026-08-24", terms: "Z030", currency: "COP", center: "CC-2020", subarea: "Servicios Generales", tax: "C1", description: "Mobiliario para nueva sede: 40 puestos de trabajo con silla ergonómica", quantity: 40, price: 1850000 },
+  { id: "sol-004", vendor: "Cloud Andina S.A.S.", amount: 25000000, date: "2026-08-26", terms: "Z000", currency: "COP", center: "CC-1010", subarea: "Desarrollo", tax: "C1", description: "Bolsa de 100 horas de arquitectura de nube para migración", quantity: 100, price: 250000 },
+  { id: "sol-005", vendor: "Papelería Central Ltda.", amount: 3200000, date: "2026-08-27", terms: "Z015", currency: "COP", center: "CC-2020", subarea: "Compras", tax: "C1", description: "Papelería y tóner para el trimestre", quantity: 1, price: 3200000 },
+  { id: "sol-006", vendor: "TecnoSuministros S.A.S.", amount: 5400000, date: "2026-08-29", terms: "", currency: "COP", center: "CC-1010", subarea: "Soporte", tax: "", description: "Diademas con micrófono para la mesa de soporte", quantity: 30, price: 180000 },
 ];
 
 const thread = document.querySelector("#thread");
@@ -27,10 +27,21 @@ function renderCases() {
     const button = document.createElement("button");
     button.className = "case-button";
     button.type = "button";
-    button.innerHTML = `<span class="case-id">${item.id}</span><span class="case-total">${item.amount}</span><span class="case-vendor">${item.vendor}</span>`;
+    button.innerHTML = `<span class="case-id">${item.id}</span><span class="case-total">${formatAmount(item.amount)}</span><span class="case-vendor">${item.vendor}</span>`;
     button.addEventListener("click", () => {
       selectedCase = item.id;
       document.querySelector("#active-case").textContent = item.id;
+      document.querySelector("#conversation-case").textContent = item.id;
+      document.querySelector("#preview-vendor").value = item.vendor;
+      document.querySelector("#preview-date").value = item.date.split("-").reverse().join(".");
+      document.querySelector("#preview-terms").value = item.terms;
+      document.querySelector("#preview-currency").value = item.currency;
+      document.querySelector("#preview-request").value = item.id.toUpperCase().replace("SOL", "SOL-2026");
+      document.querySelector("#preview-center").value = item.center;
+      document.querySelector("#preview-subarea").value = item.subarea;
+      document.querySelector("#preview-tax").value = item.tax;
+      document.querySelector("#preview-total").textContent = `Total: ${formatAmount(item.amount)} ${item.currency}`;
+      renderItemPreview(item);
       document.querySelectorAll(".case-button").forEach((entry) => entry.classList.toggle("active", entry === button));
       input.value = `Procesa ${item.id}. Resume las validaciones y prepara la orden, sin crearla si requiere confirmación.`;
       input.focus();
@@ -38,6 +49,22 @@ function renderCases() {
     });
     return button;
   }));
+}
+
+function formatAmount(value) {
+  return new Intl.NumberFormat("es-CO", { maximumFractionDigits: 0 }).format(value);
+}
+
+function renderItemPreview(item) {
+  const row = document.createElement("tr");
+  const values = ["10", "", item.description, String(item.quantity), "UN", formatAmount(item.price), item.currency, item.center.slice(-4), item.tax];
+  for (const [index, value] of values.entries()) {
+    const cell = document.createElement("td");
+    cell.textContent = value;
+    if (index === 2) cell.className = "description-cell";
+    row.append(cell);
+  }
+  document.querySelector("#preview-items").replaceChildren(row);
 }
 
 function addMessage(role, content) {

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f3f1eb">
+    <meta name="theme-color" content="#cbd5df">
     <title>Órdenes de compra | Perxia</title>
     <link rel="stylesheet" href="/styles.css">
     <script type="module" src="/app.js"></script>
@@ -17,14 +17,51 @@
         <div class="rail-bottom"><span class="status-dot"></span><span id="service-status">Conectando al agente</span></div>
       </aside>
       <main class="workspace">
+        <nav class="sap-menubar" aria-label="Menú principal">
+          <span>Purchase Order</span><span>Edit</span><span>Goto</span><span>Environment</span><span>System</span><span>Help</span>
+        </nav>
+        <div class="sap-toolbar" aria-label="Barra de herramientas">
+          <span class="sap-back" title="Volver">‹</span><span class="sap-forward" title="Continuar">›</span>
+          <span class="sap-icon-separator"></span><span class="sap-tool-icon green" title="Aceptar">●</span>
+          <span class="sap-tool-icon amber" title="Guardar">▣</span><span class="sap-tool-icon blue" title="Buscar">⌕</span>
+          <span class="sap-tool-icon gray" title="Imprimir">▤</span><span class="sap-tool-icon gray" title="Ayuda">?</span>
+          <div class="sap-command"><span>◇</span><span>Purchase Order</span><span class="command-caret">⌄</span></div>
+          <span class="sap-environment">SAP SIMULADO</span>
+        </div>
         <header class="topbar">
-          <div class="breadcrumb"><span>COMPRAS</span><span class="slash">/</span><strong>ASISTENTE DE ÓRDENES</strong></div>
-          <div class="top-actions"><span class="mode-pill"><i></i> SAP SIMULADO</span><button id="new-session" class="icon-button" type="button" title="Nueva conversación" aria-label="Nueva conversación">＋</button></div>
+          <div class="transaction-title"><span class="transaction-mark">▣</span><h1>Create Purchase Order</h1></div>
+          <div class="top-actions"><span class="mode-pill"><i></i> PRUEBA LOCAL</span><button id="new-session" class="icon-button" type="button" title="Nueva conversación" aria-label="Nueva conversación">＋</button></div>
         </header>
         <section class="work-area">
+          <div class="document-row">
+            <label class="document-type"><span>Document type</span><strong>NB Standard PO</strong><b>⌄</b></label>
+            <label class="document-vendor"><span>Vendor</span><input id="preview-vendor" readonly placeholder="Select a request"></label>
+            <label class="document-date"><span>Doc. date</span><input id="preview-date" readonly placeholder="--.--.----"></label>
+            <div class="case-focus"><span class="focus-dot"></span><span id="active-case">No request selected</span></div>
+          </div>
+          <nav class="sap-tabs" aria-label="Datos del pedido">
+            <span class="active">Delivery/Invoice</span><span>Conditions</span><span>Texts</span><span>Address</span><span>Communication</span><span>Partners</span><span>Additional Data</span><span>Org. Data</span><span>Status</span>
+          </nav>
+          <section class="header-fields" aria-label="Datos generales del pedido">
+            <label><span>Payment Terms</span><input id="preview-terms" readonly placeholder=""></label>
+            <label><span>Currency</span><input id="preview-currency" readonly placeholder=""></label>
+            <label><span>Purchase request</span><input id="preview-request" readonly placeholder=""></label>
+            <label><span>Cost center</span><input id="preview-center" readonly placeholder=""></label>
+            <label><span>Subarea</span><input id="preview-subarea" readonly placeholder=""></label>
+            <label><span>Tax code</span><input id="preview-tax" readonly placeholder=""></label>
+          </section>
+          <section class="items-section" aria-label="Posiciones del pedido">
+            <div class="items-heading"><strong>Item overview</strong><span id="preview-total">Total: --</span></div>
+            <div class="table-scroll">
+              <table class="items-table">
+                <thead><tr><th>Itm</th><th>Material</th><th>Short Text</th><th>PO Quantity</th><th>OUn</th><th>Net Price</th><th>Curr.</th><th>Plnt</th><th>Tax</th></tr></thead>
+                <tbody id="preview-items"><tr class="empty-row"><td colspan="9"></td></tr></tbody>
+              </table>
+            </div>
+          </section>
           <div class="conversation-head">
-            <div><p class="eyebrow">ANALISTA ADMINISTRATIVA <span>·</span> SESIÓN LOCAL</p><h1>Preparar orden de compra</h1></div>
-            <div class="case-focus"><span class="focus-dot"></span><span id="active-case">Sin solicitud seleccionada</span></div>
+            <div><p class="eyebrow">ASISTENTE DE COMPRAS <span>·</span> CONVERSACIÓN</p></div>
+            <div class="case-focus"><span class="focus-dot"></span><span id="conversation-case">Ready</span></div>
           </div>
           <div id="thread" class="thread" aria-live="polite">
             <article class="message assistant-message">
@@ -42,7 +79,7 @@
             <textarea id="message-input" rows="1" placeholder="Escribe una solicitud o pregunta…" maxlength="8000"></textarea>
             <div class="composer-footer"><span>Los valores se obtienen de las herramientas y maestros del reto.</span><button id="send-button" class="send-button" type="submit" aria-label="Enviar mensaje" title="Enviar mensaje">↑</button></div>
           </form>
-          <footer class="workspace-footer"><span>AMBIENTE DE PRUEBA</span><span>Las órdenes se guardan en el SAP simulado local</span></footer>
+          <footer class="workspace-footer"><span>AMBIENTE DE PRUEBA</span><span>Órdenes gestionadas por el SAP simulado</span></footer>
         </section>
       </main>
     </div>
