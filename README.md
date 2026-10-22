@@ -34,3 +34,11 @@ El demo limpia `out/`, procesa los seis casos, prueba el rechazo de bloqueos y c
 - `GET /api/sessions/:id`: mensajes y llamadas de herramientas de una sesión en memoria.
 
 La aplicación incluye el SAP simulado local. No se ha desplegado una URL pública: requiere configurar el proveedor y publicar el proyecto en una cuenta de despliegue.
+
+## Vercel
+
+El backend se despliega como una función Express desde `src/server.ts`; los assets están en `public/` y los fixtures se incluyen en la función con `vercel.json`. En Vercel, `out/` se escribe en `/tmp` y no es persistente entre ejecuciones, por lo que este modo sirve para la prueba, no como almacenamiento de auditoría de producción.
+
+Configura `OPENAI_API_KEY` y, opcionalmente, `OPENAI_MODEL` en las variables de entorno del proyecto Vercel. El dominio de prueba está protegido actualmente por Vercel SSO; para acceso público, desactiva Deployment Protection en la configuración del proyecto después del deployment.
+
+URL de prueba: https://reto-03-1-performesgotig-6391s-projects.vercel.app/

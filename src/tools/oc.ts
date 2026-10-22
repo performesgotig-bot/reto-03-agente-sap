@@ -3,6 +3,7 @@ import { appendFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
 import { z } from "zod";
+import { getOutputDirectory } from "../runtime/storage.js";
 import { SapMockAdapter } from "../sap/mock.js";
 import type { OrdenCompra } from "../sap/adapter.js";
 
@@ -387,7 +388,7 @@ async function appendControl(directory: string, row: {
   bloqueos: string[];
   confirmaciones: string[];
 }): Promise<void> {
-  const file = path.join(directory, "out", "control.csv");
+  const file = path.join(getOutputDirectory(directory), "control.csv");
   await mkdir(path.dirname(file), { recursive: true });
   try {
     await readFile(file, "utf8");
@@ -478,7 +479,7 @@ export const construir_payload = {
           excepciones: "derivado: confirmaciones RC5-RC9",
         },
       };
-      const outputDirectory = path.join(ctx.directory, "out", args.caso.toLowerCase());
+      const outputDirectory = path.join(getOutputDirectory(ctx.directory), args.caso.toLowerCase());
       await mkdir(outputDirectory, { recursive: true });
       const tracePath = path.join(outputDirectory, "trazabilidad.json");
       await writeFile(tracePath, `${JSON.stringify(trace, null, 2)}\n`, "utf8");
@@ -497,7 +498,7 @@ export const generar_evidencia = {
       const paquete = await readPackage(ctx.directory, args.caso);
       const content = approvalContent(paquete);
       const sha256 = createHash("sha256").update(content, "utf8").digest("hex");
-      const outputDirectory = path.join(ctx.directory, "out", args.caso.toLowerCase());
+      const outputDirectory = path.join(getOutputDirectory(ctx.directory), args.caso.toLowerCase());
       await mkdir(outputDirectory, { recursive: true });
       const evidencePath = path.join(outputDirectory, "aprobacion.txt");
       await writeFile(evidencePath, `${content}\n\nSHA-256: ${sha256}\n`, "utf8");

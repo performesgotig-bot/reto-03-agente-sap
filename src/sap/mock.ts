@@ -1,5 +1,6 @@
 import { appendFile, mkdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { getOutputDirectory } from "../runtime/storage.js";
 import type { OrdenCompra, SapAdapter } from "./adapter.js";
 
 type StoredOrder = {
@@ -58,7 +59,7 @@ export class SapMockAdapter implements SapAdapter {
     }, 4500000000);
     const numero_oc = String(highestNumber + 1);
     const fecha = new Date().toISOString();
-    const outputDirectory = path.join(this.directory, "out", "sap");
+    const outputDirectory = path.join(getOutputDirectory(this.directory), "sap");
     await mkdir(outputDirectory, { recursive: true });
     await appendFile(
       path.join(outputDirectory, "ordenes.jsonl"),
@@ -71,7 +72,7 @@ export class SapMockAdapter implements SapAdapter {
   private async readOrders(): Promise<StoredOrder[]> {
     try {
       const contents = await readFile(
-        path.join(this.directory, "out", "sap", "ordenes.jsonl"),
+        path.join(getOutputDirectory(this.directory), "sap", "ordenes.jsonl"),
         "utf8"
       );
       return contents

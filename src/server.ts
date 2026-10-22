@@ -6,6 +6,7 @@ import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import { OpenAiAdapter } from "./llm/openai.js";
 import type { ChatMessage, LlmAdapter, ToolDefinition } from "./llm/adapter.js";
+import { getOutputDirectory } from "./runtime/storage.js";
 import { toolSchemas } from "./tools/oc.js";
 
 type ToolKey = keyof typeof toolSchemas;
@@ -42,7 +43,7 @@ const llm: LlmAdapter | null = process.env.OPENAI_API_KEY
 const toolDefinitions = createToolDefinitions();
 
 app.use(express.json({ limit: "32kb" }));
-app.use(express.static(path.join(directory, "web")));
+app.use(express.static(path.join(directory, "public")));
 
 app.get("/api/health", (_request, response) => {
   response.json({ ok: true, provider: llm?.provider ?? "no configurado", model: llm?.model ?? model });
@@ -266,7 +267,7 @@ function makeToolView(tool: string, args: unknown, result: unknown): ToolCallVie
 }
 
 async function logToolCall(sessionId: string, call: ToolCallView): Promise<void> {
-  const file = path.join(directory, "out", "log.jsonl");
+  const file = path.join(getOutputDirectory(directory), "log.jsonl");
   const { mkdir, appendFile } = await import("node:fs/promises");
   await mkdir(path.dirname(file), { recursive: true });
   await appendFile(file, `${JSON.stringify({ sessionId, ...call, ts: new Date().toISOString() })}\n`, "utf8");
@@ -292,6 +293,10 @@ function positiveInteger(value: string | undefined, fallback: number): number {
 }
 
 const port = positiveInteger(process.env.PORT, 3000);
-app.listen(port, () => {
-  console.log(`Agente de órdenes disponible en http://localhost:${port}`);
-});
+export default app;
+
+if (process.env.VERCEL !== "1") {
+  app.listen(port, () => {
+    console.log(`Agente de órdenes disponible en http://localhost:${port}`);
+  });
+}
