@@ -1,4 +1,4 @@
-import OpenAI from "openai";
+import { OpenAI } from "openai";
 import type { ChatMessage, LlmAdapter, LlmResponse, ToolDefinition } from "./adapter.js";
 
 export class OpenAiAdapter implements LlmAdapter {
@@ -14,7 +14,7 @@ export class OpenAiAdapter implements LlmAdapter {
   async enviar(messages: ChatMessage[], tools: ToolDefinition[]): Promise<LlmResponse> {
     const response = await this.client.chat.completions.create({
       model: this.model,
-      messages: messages as OpenAI.Chat.Completions.ChatCompletionMessageParam[],
+      messages: messages as Parameters<OpenAI["chat"]["completions"]["create"]>[0]["messages"],
       tools: tools.map((tool) => ({
         type: "function" as const,
         function: {
