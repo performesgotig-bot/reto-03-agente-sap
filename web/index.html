@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f1eb">
+    <title>Órdenes de compra | Perxia</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="rail" aria-label="Navegación de casos">
+        <a class="brand" href="/" aria-label="Perxia, inicio"><span class="brand-mark">P</span><span>PERXIA<span class="brand-sub">OPERACIONES</span></span></a>
+        <div class="rail-label">COLA DE COMPRAS <span>06</span></div>
+        <nav id="case-list" class="case-list" aria-label="Solicitudes disponibles"></nav>
+        <div class="rail-bottom"><span class="status-dot"></span><span id="service-status">Conectando al agente</span></div>
+      </aside>
+      <main class="workspace">
+        <header class="topbar">
+          <div class="breadcrumb"><span>COMPRAS</span><span class="slash">/</span><strong>ASISTENTE DE ÓRDENES</strong></div>
+          <div class="top-actions"><span class="mode-pill"><i></i> SAP SIMULADO</span><button id="new-session" class="icon-button" type="button" title="Nueva conversación" aria-label="Nueva conversación">＋</button></div>
+        </header>
+        <section class="work-area">
+          <div class="conversation-head">
+            <div><p class="eyebrow">ANALISTA ADMINISTRATIVA <span>·</span> SESIÓN LOCAL</p><h1>Preparar orden de compra</h1></div>
+            <div class="case-focus"><span class="focus-dot"></span><span id="active-case">Sin solicitud seleccionada</span></div>
+          </div>
+          <div id="thread" class="thread" aria-live="polite">
+            <article class="message assistant-message">
+              <div class="avatar">PX</div>
+              <div class="message-body"><div class="message-meta">ASISTENTE <time>AHORA</time></div><p>Lista para revisar una solicitud. Selecciona un caso o escribe su identificador para empezar.</p></div>
+            </article>
+          </div>
+          <div id="thinking" class="thinking" hidden><span></span><span></span><span></span><label>Revisando solicitud y controles</label></div>
+          <div id="confirmation-panel" class="confirmation-panel" hidden>
+            <div><strong>Confirmación requerida</strong><span>La orden no se creará hasta que autorices esta excepción.</span></div>
+            <div class="confirmation-actions"><button id="cancel-confirmation" class="secondary-button" type="button">Cancelar</button><button id="confirm-creation" class="primary-button" type="button">Confirmar creación <span>↗</span></button></div>
+          </div>
+          <form id="chat-form" class="composer">
+            <label class="sr-only" for="message-input">Mensaje</label>
+            <textarea id="message-input" rows="1" placeholder="Escribe una solicitud o pregunta…" maxlength="8000"></textarea>
+            <div class="composer-footer"><span>Los valores se obtienen de las herramientas y maestros del reto.</span><button id="send-button" class="send-button" type="submit" aria-label="Enviar mensaje" title="Enviar mensaje">↑</button></div>
+          </form>
+          <footer class="workspace-footer"><span>AMBIENTE DE PRUEBA</span><span>Las órdenes se guardan en el SAP simulado local</span></footer>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
